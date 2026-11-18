@@ -3,3 +3,5 @@ target/
 *.iml
 .vscode/
 .env
+docker/jenkins
+./docker/jenkins
