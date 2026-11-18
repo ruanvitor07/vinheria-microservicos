@@ -1,0 +1,37 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: producao-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/producao_db}
+    username: ${DB_USER:producao}
+    password: ${DB_PASSWORD:producao}
+  jpa:
+    hibernate:
+      ddl-auto: update        # simples para estudo; em produção use Flyway/Liquibase
+    open-in-view: false
+  mvc:
+    problemdetails:
+      enabled: true           # erros no formato RFC 7807 (ProblemDetail)
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USER:vinheria}
+    password: ${RABBITMQ_PASSWORD:vinheria}
+    listener:
+      simple:
+        default-requeue-rejected: false   # esgotadas as tentativas, a mensagem vai para a DLQ
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1s
+          multiplier: 2                   # backoff exponencial
+app:
+  jwt:
+    secret: ${JWT_SECRET:chave-de-desenvolvimento-com-pelo-menos-32-bytes!}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

@@ -1,0 +1,45 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 2000
+        response-timeout: 10s
+      routes:
+        # Os hosts abaixo são nomes de serviço do Docker Compose (descoberta via DNS do Docker).
+        - id: identidade
+          uri: ${IDENTIDADE_URL:http://localhost:8081}
+          predicates:
+            - Path=/auth/**,/api/usuarios/**
+        - id: producao
+          uri: ${PRODUCAO_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/lotes/**
+        - id: qualidade
+          uri: ${QUALIDADE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/analises/**
+        - id: estoque
+          uri: ${ESTOQUE_URL:http://localhost:8084}
+          predicates:
+            - Path=/api/produtos/**,/api/reservas/**
+        - id: pedidos
+          uri: ${PEDIDOS_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/pedidos/**
+        - id: rastreabilidade
+          uri: ${RASTREABILIDADE_URL:http://localhost:8086}
+          predicates:
+            - Path=/api/rastreabilidade/**
+        - id: notificacoes
+          uri: ${NOTIFICACOES_URL:http://localhost:8087}
+          predicates:
+            - Path=/api/notificacoes/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

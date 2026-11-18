@@ -1,0 +1,39 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: pedidos-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/pedidos_db}
+    username: ${DB_USER:pedidos}
+    password: ${DB_PASSWORD:pedidos}
+  jpa:
+    hibernate:
+      ddl-auto: update        # simples para estudo; em produção use Flyway/Liquibase
+    open-in-view: false
+  mvc:
+    problemdetails:
+      enabled: true           # erros no formato RFC 7807 (ProblemDetail)
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USER:vinheria}
+    password: ${RABBITMQ_PASSWORD:vinheria}
+    listener:
+      simple:
+        default-requeue-rejected: false   # esgotadas as tentativas, a mensagem vai para a DLQ
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1s
+          multiplier: 2                   # backoff exponencial
+app:
+  estoque:
+    url: ${ESTOQUE_URL:http://localhost:8084}
+  jwt:
+    secret: ${JWT_SECRET:chave-de-desenvolvimento-com-pelo-menos-32-bytes!}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

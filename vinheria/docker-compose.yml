@@ -1,0 +1,135 @@
+# Sobe toda a plataforma:  docker compose up --build
+# Único ponto de entrada da API: http://localhost:8080 (API Gateway)
+# Painel do RabbitMQ:            http://localhost:15672 (vinheria / vinheria)
+
+x-servico: &servico
+  restart: unless-stopped
+  depends_on:
+    postgres:
+      condition: service_healthy
+    rabbitmq:
+      condition: service_healthy
+
+x-env-comum: &env-comum
+  JWT_SECRET: ${JWT_SECRET:-chave-de-desenvolvimento-com-pelo-menos-32-bytes!}
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_USER: vinheria
+  RABBITMQ_PASSWORD: vinheria
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"   # opcional: apenas para inspecionar os bancos com DBeaver/psql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: vinheria
+      RABBITMQ_DEFAULT_PASS: vinheria
+    ports:
+      - "15672:15672" # painel de administração
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  identidade-service:
+    <<: *servico
+    build: ./services/identidade-service
+    environment:
+      <<: *env-comum
+      DB_URL: jdbc:postgresql://postgres:5432/identidade_db
+      DB_USER: identidade
+      DB_PASSWORD: identidade
+
+  producao-service:
+    <<: *servico
+    build: ./services/producao-service
+    environment:
+      <<: *env-comum
+      DB_URL: jdbc:postgresql://postgres:5432/producao_db
+      DB_USER: producao
+      DB_PASSWORD: producao
+
+  qualidade-service:
+    <<: *servico
+    build: ./services/qualidade-service
+    environment:
+      <<: *env-comum
+      DB_URL: jdbc:postgresql://postgres:5432/qualidade_db
+      DB_USER: qualidade
+      DB_PASSWORD: qualidade
+
+  estoque-service:
+    <<: *servico
+    build: ./services/estoque-service
+    environment:
+      <<: *env-comum
+      DB_URL: jdbc:postgresql://postgres:5432/estoque_db
+      DB_USER: estoque
+      DB_PASSWORD: estoque
+
+  pedidos-service:
+    <<: *servico
+    build: ./services/pedidos-service
+    environment:
+      <<: *env-comum
+      DB_URL: jdbc:postgresql://postgres:5432/pedidos_db
+      DB_USER: pedidos
+      DB_PASSWORD: pedidos
+      ESTOQUE_URL: http://estoque-service:8084   # descoberta de serviço via DNS do Docker
+
+  rastreabilidade-service:
+    <<: *servico
+    build: ./services/rastreabilidade-service
+    environment:
+      <<: *env-comum
+      DB_URL: jdbc:postgresql://postgres:5432/rastreabilidade_db
+      DB_USER: rastreabilidade
+      DB_PASSWORD: rastreabilidade
+
+  notificacoes-service:
+    <<: *servico
+    build: ./services/notificacoes-service
+    environment:
+      <<: *env-comum
+      DB_URL: jdbc:postgresql://postgres:5432/notificacoes_db
+      DB_USER: notificacoes
+      DB_PASSWORD: notificacoes
+
+  api-gateway:
+    build: ./services/api-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      IDENTIDADE_URL: http://identidade-service:8081
+      PRODUCAO_URL: http://producao-service:8082
+      QUALIDADE_URL: http://qualidade-service:8083
+      ESTOQUE_URL: http://estoque-service:8084
+      PEDIDOS_URL: http://pedidos-service:8085
+      RASTREABILIDADE_URL: http://rastreabilidade-service:8086
+      NOTIFICACOES_URL: http://notificacoes-service:8087
+    depends_on:
+      - identidade-service
+      - producao-service
+      - qualidade-service
+      - estoque-service
+      - pedidos-service
+      - rastreabilidade-service
+      - notificacoes-service
+
+volumes:
+  pgdata:

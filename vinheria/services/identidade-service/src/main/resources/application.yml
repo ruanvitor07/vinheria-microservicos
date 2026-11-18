@@ -1,0 +1,24 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: identidade-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/identidade_db}
+    username: ${DB_USER:identidade}
+    password: ${DB_PASSWORD:identidade}
+  jpa:
+    hibernate:
+      ddl-auto: update        # simples para estudo; em produção use Flyway/Liquibase
+    open-in-view: false
+  mvc:
+    problemdetails:
+      enabled: true           # erros no formato RFC 7807 (ProblemDetail)
+app:
+  jwt:
+    secret: ${JWT_SECRET:chave-de-desenvolvimento-com-pelo-menos-32-bytes!}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
