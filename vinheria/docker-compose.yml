@@ -130,6 +130,16 @@ services:
       - pedidos-service
       - rastreabilidade-service
       - notificacoes-service
+  jenkins:
+    image: jenkins/jenkins:lts-jdk21
+    container_name: jenkins
+    build:
+      context: .
+    ports:
+      - "1984:8080"
+      - "50000:50000"
+    volumes:
+      - ./docker/jenkins:/var/jenkins_home
 
 volumes:
   pgdata:
