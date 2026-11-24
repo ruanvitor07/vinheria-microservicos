@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-/** Catálogo inicial para facilitar os testes. */
 @Component
 @RequiredArgsConstructor
 public class DadosIniciais implements CommandLineRunner {

@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * Registra qualquer evento de lote/qualidade no histórico. Recebe o payload como Map porque
- * só precisa do "loteCodigo": não depende do formato completo de cada evento.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor

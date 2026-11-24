@@ -38,7 +38,6 @@ public class LoteController {
         return LoteResponse.from(loteService.buscarPorCodigo(codigo));
     }
 
-    /** Ação de negócio modelada como sub-recurso: conclui a etapa atual do lote. */
     @PostMapping("/{codigo}/etapas/concluir")
     @PreAuthorize("hasAnyRole('OPERADOR','ADMIN')")
     public LoteResponse concluirEtapa(@PathVariable String codigo,

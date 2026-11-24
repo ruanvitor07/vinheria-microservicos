@@ -9,10 +9,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Pedido com estado explícito (PENDENTE, CONFIRMADO, RECUSADO, CANCELADO), como orienta o PDF:
- * sem transação distribuída, o andamento da Saga fica registrado no próprio status.
- */
 @Entity
 @Table(name = "pedidos")
 @Getter

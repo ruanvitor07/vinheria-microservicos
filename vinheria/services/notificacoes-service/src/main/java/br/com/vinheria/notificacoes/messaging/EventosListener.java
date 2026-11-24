@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * Transforma eventos de negócio em notificações. O envio de e-mail é SIMULADO (apenas log + banco).
- * Por ser assíncrono, uma falha no envio nunca atrasa nem derruba a criação de um pedido.
- */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor

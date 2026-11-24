@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-/**
- * Registro de entrada de garrafas vindas da produção. O loteCodigo é ÚNICO:
- * se o evento lote.engarrafado chegar duas vezes, a segunda é ignorada (idempotência).
- */
+
 @Entity
 @Table(name = "entradas_estoque")
 @Getter

@@ -7,11 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-/**
- * Reage aos resultados de qualidade. A Produção não chama o serviço de Qualidade:
- * ela apenas ouve os eventos e ajusta o status do lote. Os handlers são idempotentes
- * (receber o mesmo evento duas vezes não causa problema).
- */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor

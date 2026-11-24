@@ -7,10 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * Cópia local e mínima dos lotes que a Produção criou (alimentada pelo evento lote.criado).
- * Assim a Qualidade valida o código do lote sem fazer chamada REST à Produção.
- */
+
 @Entity
 @Table(name = "lotes_conhecidos")
 @Getter

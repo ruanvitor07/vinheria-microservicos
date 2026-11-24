@@ -4,15 +4,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Regras (simplificadas e didáticas) de aceitação de um lote.
- * Classe sem Spring de propósito: fácil de ler e de testar.
- */
 public final class RegrasQualidade {
 
     private RegrasQualidade() {}
 
-    /** Retorna a lista de motivos de reprovação; lista vazia significa lote aprovado. */
     public static List<String> verificar(BigDecimal ph, BigDecimal acidezTotal,
                                          BigDecimal teorAlcoolico, BigDecimal temperaturaC) {
         List<String> falhas = new ArrayList<>();

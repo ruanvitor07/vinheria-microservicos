@@ -22,11 +22,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
-/**
- * O identidade-service é o único que EMITE tokens (JwtEncoder). Os demais serviços só validam.
- * Escolha didática: chave simétrica (HS256) compartilhada. Em produção, prefira chaves assimétricas
- * (RS256) ou um provedor OIDC como Keycloak, onde os serviços conhecem apenas a chave pública.
- */
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {

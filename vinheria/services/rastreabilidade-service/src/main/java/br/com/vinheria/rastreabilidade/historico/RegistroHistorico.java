@@ -9,7 +9,6 @@ import org.hibernate.type.SqlTypes;
 import java.time.Instant;
 import java.util.Map;
 
-/** Linha do histórico de um lote. Append-only: registros nunca são alterados nem removidos. */
 @Entity
 @Table(name = "historico_lote", indexes = @Index(columnList = "loteCodigo"))
 @Getter
@@ -23,10 +22,8 @@ public class RegistroHistorico {
     @Column(nullable = false)
     private String loteCodigo;
 
-    /** Routing key do evento, ex.: lote.criado, qualidade.reprovada. */
     private String tipoEvento;
 
-    /** Conteúdo original do evento, guardado como JSON. */
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> detalhes;
 

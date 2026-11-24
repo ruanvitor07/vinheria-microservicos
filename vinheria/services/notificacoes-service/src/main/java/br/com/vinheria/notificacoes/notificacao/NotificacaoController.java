@@ -15,7 +15,6 @@ public class NotificacaoController {
 
     private final NotificacaoRepository repository;
 
-    /** Últimas 50 notificações geradas (útil para acompanhar o fluxo de eventos). */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<Notificacao> ultimas() {

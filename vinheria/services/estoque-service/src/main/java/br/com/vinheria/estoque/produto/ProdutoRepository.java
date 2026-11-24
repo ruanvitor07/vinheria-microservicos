@@ -16,10 +16,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     boolean existsBySku(String sku);
 
-    /**
-     * Busca com lock de escrita: duas reservas simultâneas do mesmo SKU não conseguem
-     * "gastar" o mesmo saldo. Ordenado por SKU para evitar deadlock entre transações.
-     */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Produto p where p.sku in :skus order by p.sku")
     List<Produto> buscarParaAtualizar(@Param("skus") Collection<String> skus);

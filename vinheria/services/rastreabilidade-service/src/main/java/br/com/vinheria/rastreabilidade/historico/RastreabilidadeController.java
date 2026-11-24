@@ -18,7 +18,6 @@ public class RastreabilidadeController {
 
     private final RegistroHistoricoRepository repository;
 
-    /** Reconstrói a linha do tempo de um lote: criação, etapas, análises e engarrafamento. */
     @GetMapping("/lotes/{codigo}")
     @PreAuthorize("hasAnyRole('OPERADOR','LABORATORIO','ADMIN')")
     public List<RegistroHistoricoResponse> historicoDoLote(@PathVariable String codigo) {

@@ -7,11 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-/**
- * Publica eventos no RabbitMQ. Se houver transação aberta, o evento só é enviado
- * DEPOIS do commit — assim não anunciamos algo que foi desfeito (rollback).
- * (Versão simplificada do Outbox Pattern: veja o README.)
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor

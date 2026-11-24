@@ -21,14 +21,12 @@ public class AuthService {
     private final TokenService tokenService;
 
     public TokenResponse login(LoginRequest request) {
-        // Mensagem genérica: não revela se foi o usuário ou a senha que errou.
         Usuario usuario = usuarioRepository.findByUsername(request.username())
                 .filter(u -> passwordEncoder.matches(request.senha(), u.getSenhaHash()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos"));
         return tokenService.gerar(usuario);
     }
 
-    /** Auto-cadastro: sempre cria um CLIENTE. Outros perfis só são criados por administração. */
     public Usuario registrar(RegistroRequest request) {
         if (usuarioRepository.existsByUsername(request.username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username já utilizado");

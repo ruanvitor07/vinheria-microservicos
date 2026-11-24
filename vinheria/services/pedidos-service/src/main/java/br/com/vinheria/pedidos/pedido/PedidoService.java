@@ -16,16 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 import java.util.List;
 
-/**
- * Orquestra a Saga do pedido (versão simples):
- *   1) salva o pedido como PENDENTE
- *   2) pede ao Estoque, via REST, a reserva dos itens
- *   3) sucesso -> CONFIRMADO + evento pedido.confirmado | falha -> RECUSADO
- *   Cancelamento (compensação): libera a reserva no Estoque e marca CANCELADO.
- *
- * Os métodos NÃO são @Transactional de propósito: não queremos manter uma conexão/transação
- * de banco aberta enquanto esperamos uma chamada HTTP a outro serviço.
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
