@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Reserva de estoque feita para um pedido. O pedidoId é único, o que torna a reserva idempotente. */
 @Entity
 @Table(name = "reservas")
 @Getter

@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * API chamada pelo serviço de Pedidos (repassando o JWT do cliente).
- */
+
 @RestController
 @RequestMapping("/api/reservas")
 @RequiredArgsConstructor

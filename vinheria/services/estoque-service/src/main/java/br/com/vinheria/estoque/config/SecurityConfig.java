@@ -16,10 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Este serviço é um "resource server": ele não emite tokens, apenas VALIDA o JWT
- * emitido pelo identidade-service (mesma chave secreta HS256) e lê os papéis do claim "roles".
- */
+
 @Configuration
 @EnableMethodSecurity // habilita @PreAuthorize nos controllers
 public class SecurityConfig {

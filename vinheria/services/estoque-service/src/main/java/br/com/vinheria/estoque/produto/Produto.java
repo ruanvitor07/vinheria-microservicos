@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/** Produto acabado (garrafa) controlado em estoque. disponivel = saldo - reservado. */
 @Entity
 @Table(name = "produtos")
 @Getter

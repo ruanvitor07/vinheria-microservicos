@@ -21,7 +21,6 @@ public class PedidoController {
 
     private final PedidoService pedidoService;
 
-    /** Sempre devolve 201 com o pedido; o campo "status" informa se foi CONFIRMADO ou RECUSADO. */
     @PostMapping
     @PreAuthorize("hasAnyRole('CLIENTE','ADMIN')")
     public ResponseEntity<PedidoResponse> criar(@Valid @RequestBody CriarPedidoRequest request,
@@ -30,7 +29,6 @@ public class PedidoController {
         return ResponseEntity.created(URI.create("/api/pedidos/" + pedido.getId())).body(PedidoResponse.from(pedido));
     }
 
-    /** Cliente vê só os seus pedidos; ADMIN vê todos. */
     @GetMapping
     @PreAuthorize("hasAnyRole('CLIENTE','ADMIN')")
     public List<PedidoResponse> listar(JwtAuthenticationToken auth) {

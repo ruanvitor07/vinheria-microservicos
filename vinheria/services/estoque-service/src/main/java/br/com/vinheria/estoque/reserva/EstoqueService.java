@@ -28,10 +28,7 @@ public class EstoqueService {
     private final EntradaEstoqueRepository entradaRepository;
     private final EventoPublisher eventoPublisher;
 
-    /**
-     * Reserva todos os itens ou nenhum (tudo na mesma transação).
-     * Chamada de forma SÍNCRONA (REST) pelo serviço de Pedidos, que precisa da resposta para continuar.
-     */
+
     @Transactional
     public Reserva reservar(ReservaRequest req) {
         var existente = reservaRepository.findByPedidoId(req.pedidoId());
@@ -74,7 +71,6 @@ public class EstoqueService {
         return reserva;
     }
 
-    /** Compensação da Saga: libera a reserva de um pedido cancelado. Idempotente. */
     @Transactional
     public void liberarReserva(Long pedidoId) {
         Reserva reserva = reservaRepository.findByPedidoId(pedidoId)
@@ -89,15 +85,13 @@ public class EstoqueService {
         reserva.cancelar();
     }
 
-    /** Chamado pelo listener de lote.engarrafado. Idempotente graças ao loteCodigo único. */
     @Transactional
     public void registrarEntradaDeProducao(Eventos.LoteEngarrafado evento) {
         if (entradaRepository.existsByLoteCodigo(evento.loteCodigo())) {
             log.info("Entrada do lote {} já registrada; evento duplicado ignorado", evento.loteCodigo());
             return;
         }
-        // Se o SKU não existir, lança exceção: após os retries, a mensagem vai para a DLQ
-        // e um administrador pode cadastrar o produto e reprocessá-la.
+
         Produto produto = produtoRepository.buscarParaAtualizar(List.of(evento.sku())).stream().findFirst()
                 .orElseThrow(() -> new IllegalStateException("SKU não cadastrado no estoque: " + evento.sku()));
 

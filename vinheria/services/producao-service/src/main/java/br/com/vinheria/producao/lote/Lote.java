@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/** Lote de vinho em produção. As regras de transição de etapa/status ficam aqui dentro. */
 @Entity
 @Table(name = "lotes")
 @Getter

@@ -12,10 +12,6 @@ import org.springframework.web.client.RestClientException;
 
 import java.util.List;
 
-/**
- * Cliente REST do serviço de Estoque. Repassa o JWT do usuário: o Estoque valida o token
- * por conta própria (cada serviço autoriza suas operações).
- */
 @Component
 @RequiredArgsConstructor
 public class EstoqueClient {
